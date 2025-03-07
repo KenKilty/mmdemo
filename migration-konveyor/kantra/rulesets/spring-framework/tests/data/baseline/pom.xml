@@ -28,7 +28,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <nimbus-jwt-version>4.39.1</nimbus-jwt-version>
+        <nimbus-jwt-version>9.37.2</nimbus-jwt-version>
         <signalfx-agent.version>v1.20.0</signalfx-agent.version>
 
         <!-- Red Hat Business Service Versions -->
