@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+    <libraryInfo home="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home" version="21.0.6"/>
+    <libraryInfo home="/opt/homebrew/Cellar/openjdk/23.0.2" version="23.0.2">
+        <bootpath>
+            <entry path="null"/>
+        </bootpath>
+        <extensionDirs>
+            <entry path="null"/>
+        </extensionDirs>
+        <endorsedDirs>
+            <entry path="null"/>
+        </endorsedDirs>
+    </libraryInfo>
+    <libraryInfo home="/opt/homebrew/Cellar/openjdk/23.0.2/libexec/openjdk.jdk/Contents/Home" version="23.0.2"/>
+</libraryInfos>

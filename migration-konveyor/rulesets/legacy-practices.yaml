@@ -1,0 +1,125 @@
+- ruleID: custom-ruleset-legacy-config-01000
+  name: Hardcoded configuration paths in properties files
+  description: The application uses hardcoded paths in configuration files, which is problematic for containerization and cloud deployment.
+  category: mandatory
+  effort: 5
+  labels:
+    - konveyor.io/source
+    - konveyor.io/target=cloud-readiness
+    - tag=Configuration
+    - tag=Properties
+  links:
+    - url: https://docs.microsoft.com/en-us/azure/spring-cloud/how-to-config-server
+      title: Azure Config Server
+      description: Use Azure Config Server for externalized configuration management
+  message: |
+    The application uses hardcoded paths in configuration files, which is problematic for containerization and cloud deployment.
+
+    Hardcoded paths in configuration files can cause issues when:
+    - Deploying to containers where file system paths are different
+    - Running in cloud environments where local file system access is restricted
+    - Scaling the application across multiple instances
+
+    Recommendation:
+    - Use environment variables for configuration
+    - Implement a configuration server (e.g., Azure Config Server)
+    - Use cloud-native configuration management solutions
+  when:
+    builtin.file:
+      pattern: ".*\\.properties$"
+
+- ruleID: custom-ruleset-legacy-storage-01000
+  name: File-based storage implementation
+  description: The application uses file-based storage with direct filesystem access, which is problematic for containerization and cloud deployment.
+  category: mandatory
+  effort: 5
+  labels:
+    - konveyor.io/source
+    - konveyor.io/target=cloud-readiness
+    - tag=Storage
+    - tag=File System
+  links:
+    - url: https://docs.microsoft.com/en-us/azure/spring-cloud/how-to-use-azure-database
+      title: Azure Database
+      description: Use Azure Database for persistent storage
+  message: |
+    The application uses file-based storage with direct filesystem access, which is problematic for containerization and cloud deployment.
+
+    File-based storage can cause issues when:
+    - Deploying to containers where file system access is restricted
+    - Running in cloud environments where local storage is ephemeral
+    - Scaling the application across multiple instances
+    - Managing data consistency across instances
+
+    Recommendation:
+    - Use a proper database service (e.g., Azure Database)
+    - Implement proper transaction management
+    - Use cloud-native storage solutions
+  when:
+    builtin.file:
+      pattern: ".*\\.json$"
+
+- ruleID: custom-ruleset-legacy-logging-01000
+  name: File-based logging implementation
+  description: The application uses file-based logging with local file system access, which is problematic for containerization and cloud deployment.
+  category: mandatory
+  effort: 5
+  labels:
+    - konveyor.io/source
+    - konveyor.io/target=cloud-readiness
+    - tag=Logging
+    - tag=File System
+  links:
+    - url: https://docs.microsoft.com/en-us/azure/spring-cloud/how-to-logging
+      title: Azure Logging
+      description: Use Azure Logging for centralized log management
+  message: |
+    The application uses file-based logging with local file system access, which is problematic for containerization and cloud deployment.
+
+    File-based logging can cause issues when:
+    - Deploying to containers where file system access is restricted
+    - Running in cloud environments where local storage is ephemeral
+    - Managing logs across multiple instances
+    - Implementing log rotation and retention
+
+    Recommendation:
+    - Use container stdout/stderr for logging
+    - Implement structured logging (JSON format)
+    - Use cloud-native logging solutions
+  when:
+    builtin.file:
+      pattern: ".*\\.log$"
+
+- ruleID: custom-ruleset-legacy-code-01000
+  name: Legacy code style practices
+  description: The application demonstrates legacy code style practices that may impact maintainability and cloud readiness.
+  category: mandatory
+  effort: 3
+  labels:
+    - konveyor.io/source
+    - konveyor.io/target=cloud-readiness
+    - tag=Code Quality
+    - tag=Style
+  links:
+    - url: https://docs.microsoft.com/en-us/azure/spring-cloud/how-to-code-quality
+      title: Azure Code Quality
+      description: Use Azure DevOps for code quality management
+  message: |
+    The application demonstrates legacy code style practices that may impact maintainability and cloud readiness.
+
+    Legacy code style practices can cause issues with:
+    - Code maintainability
+    - Team collaboration
+    - Automated testing
+    - Code review efficiency
+
+    Recommendation:
+    - Follow Google Style Guide compliance
+    - Implement consistent import ordering
+    - Add comprehensive documentation
+    - Use standard 2-space indentation
+    - Limit lines to 100 characters
+    - Enable automated style checking
+  when:
+    builtin.file:
+      pattern: ".*\\.java$" 

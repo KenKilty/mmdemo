@@ -1,0 +1,62 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Java sources
+*.java text diff=java
+*.gradle text diff=java
+*.gradle.kts text diff=java
+
+# Documentation
+*.md text diff=markdown
+*.txt text
+*.xml text
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Docker
+*.dockerfile text
+Dockerfile text
+
+# Terraform
+*.tf text
+*.tfvars text
+
+# Properties/Config files
+*.properties text
+*.yaml text
+*.yml text
+*.json text
+
+# Binary files
+*.jar binary
+*.war binary
+*.db binary
+*.pdf binary
+*.class binary
+
+# Graphics
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+
+# Fonts
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.rar binary
+
+# Class files
+*.class binary
+
+# Logs
+*.log text 

@@ -1,0 +1,53 @@
+# Project runtime data
+data/tasks.json
+data/cache/**
+!data/.gitkeep
+!data/cache/.gitkeep
+
+# Application logs
+logs/*.log
+logs/app-*.log
+!logs/.gitkeep
+
+# Project-specific environment
+local.properties
+local.env
+
+# Project-specific build artifacts
+*.war
+*.ear
+*.jar
+*.class
+
+# Project-specific temporary files
+*.tmp
+*.swp
+*~
+
+# Maven build directory and artifacts
+target/
+*.class
+*.war
+
+# IDE files (Eclipse, IntelliJ, VS Code)
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# VS Code specific (exclude everything except debug/settings configs)
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
+.vscode/tasks.json
+.vscode/*.code-snippets
+.vscode/debug.log
+
+# OS specific files
+.DS_Store
+Thumbs.db
+._*
+.Spotlight-V100
+.Trashes 

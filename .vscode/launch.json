@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug Legacy Todo",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 18787,
+            "timeout": 60000
+        },
+        {
+            "type": "java",
+            "name": "Debug Containerized Todo",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 18788,
+            "timeout": 60000
+        }
+    ]
+} 

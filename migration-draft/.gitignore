@@ -1,0 +1,38 @@
+# Temporary deployment directory
+temp-after-container/
+
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+terraform.tfvars
+
+# Build artifacts
+target/
+*.class
+*.jar
+*.war
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Draft temporary files
+*.draft.original
+.draftignore
+draft.toml
+
+# Helm
+charts/ 

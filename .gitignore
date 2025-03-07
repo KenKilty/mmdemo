@@ -1,0 +1,84 @@
+# IDE and Editor files
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# Build artifacts
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+terraform.tfvars
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+**/charts/
+*.tgz
+
+# Container
+*.tar
+*.img
+*.draft.original
+.draftignore
+draft.toml
+
+# Environment and Configuration
+.env
+*.env.local
+**/.env
+*.properties
+!src/main/resources/*.properties
+
+# Logs and Reports
+*.log
+logs/
+**/logs/
+coverage/
+reports/
+test-output/
+.coverage
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+*~
+*.bak
+*.orig
+temp-*/
+
+# Binary files
+*.bin
+*.exe
+*.dll
+*.so
+*.dylib 

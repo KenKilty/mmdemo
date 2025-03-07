@@ -1,0 +1,56 @@
+# Project-specific build artifacts
+*.war
+*.ear
+*.jar
+*.class
+
+# Container configuration
+.env
+*.env.local
+docker-compose.override.yml
+podman-compose.override.yml
+
+# Project-specific logs
+logs/**
+!logs/.gitkeep
+
+# Project-specific temporary files
+*.tmp
+*.swp
+*~
+
+# Local development files
+local.properties
+local.env
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+*.env.local 
