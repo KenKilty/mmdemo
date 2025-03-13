@@ -4,6 +4,8 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
 # Function to check and cleanup port
@@ -50,8 +52,15 @@ case "$1" in
         ;;
 esac
 
-echo -e "${GREEN}Application URLs:${NC}"
-echo -e "  Application: ${GREEN}http://localhost:8080/legacy-todo${NC}"
+echo ""
+echo -e "${BOLD}${BLUE}=======================================================${NC}"
+echo -e "${BOLD}${GREEN}LOCAL TESTING INFORMATION${NC}"
+echo -e "${BOLD}${BLUE}=======================================================${NC}"
+echo -e "  Application URL: ${GREEN}http://localhost:8080/legacy-todo${NC}"
+echo -e "  API Endpoint:    ${GREEN}http://localhost:8080/legacy-todo/api/todos${NC}"
+echo -e "  Health Check:    ${GREEN}http://localhost:8080/legacy-todo/health${NC}"
 if [ "$1" = "debug" ]; then
-    echo -e "  Debug port: ${GREEN}18787${NC}"
-fi 
+    echo -e "  Debug port:     ${GREEN}18787${NC}"
+fi
+echo -e "${BOLD}${BLUE}=======================================================${NC}"
+echo -e "${YELLOW}Press Ctrl+C to stop the application${NC}"

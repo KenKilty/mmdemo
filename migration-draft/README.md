@@ -2,225 +2,147 @@
 
 This directory contains a copy of the todo application that was previously modernized using Konveyor Kantra. We're now using this modernized version to demonstrate how to deploy a Tomcat-based Java application to Kubernetes using [Draft](https://github.com/Azure/draft), a tool that helps developers create containerized applications and deploy them to Kubernetes.
 
-## About Draft and This Project
-
-[Draft](https://github.com/Azure/draft) is an open-source tool that helps developers create containerized applications and deploy them to Kubernetes. It provides templates and automation to generate Dockerfiles, Kubernetes manifests, and Helm charts based on the application's language and framework. While Draft provides good support for modern frameworks, its current templates are primarily focused on modern applications and appeared to not fully support legacy Java/Tomcat applications such as our todo app. This project explores how we can bridge this gap using AI to generate the necessary artifacts with the modernized version of the todo application contained in the [after-container](../after-container) project directory.
-
-## Important Disclaimer and AI Integration
-
-For the purposes of this demo, we encountered limitations with Draft's Java template that we were unable to overcome. We initially attempted to use Draft with the following command and configuration:
+## Quick Start
 
 ```bash
-# Contents of draft-config.yaml
-deployType: "Helm"          # Type of deployment artifacts to generate
-languageType: "java"        # Programming language/platform
-deployVariables:            # Variables for deployment configuration
-  - name: "PORT"           # Container port
+./deploytok8s.sh
+```
+
+After deployment, access the application at:
+- Main application: http://localhost:18081/todo
+- Health check: http://localhost:18081/todo/health
+- API: http://localhost:18081/todo/api/todos
+
+## About This Project
+
+This project demonstrates deploying the modernized Todo application (from [after-container](../after-container)) to Kubernetes using Draft. While Draft provides good support for modern frameworks, we encountered limitations with its Java template for our Tomcat-based application. We've used AI assistance to enhance the generated artifacts with proper Tomcat configuration.
+
+### Draft and AI Integration
+
+Draft's Java template works well for Spring Boot apps but didn't fully support our Tomcat-based application. We used Draft to generate initial artifacts and then enhanced them with AI assistance:
+
+```bash
+# Our Draft configuration
+deployType: "Helm"
+languageType: "java"
+deployVariables:
+  - name: "PORT"
     value: "8080"
-  - name: "SERVICEPORT"    # Service port
+  - name: "SERVICEPORT"
     value: "80"
-  - name: "APPNAME"        # Application name
+  - name: "APPNAME"
     value: "todo-app"
-  - name: "IMAGENAME"      # Container image name
+  - name: "IMAGENAME"
     value: "todo-app"
-languageVariables:          # Language-specific variables
-  - name: "VERSION"        # Java runtime version
+languageVariables:
+  - name: "VERSION"
     value: "17-jre"
-  - name: "BUILDERVERSION" # Build environment version
+  - name: "BUILDERVERSION"
     value: "3-jdk-8"
-  - name: "PORT"          # Application port
+  - name: "PORT"
     value: "8080"
 
-# Draft command
+# Draft command used
 draft create -c ./draft-config.yaml --skip-file-detection
 ```
 
-This command used Draft's Java template, which works well for Spring Boot apps but didn't fully support our Tomcat-based application. Rather than starting from scratch, we used AI (Claude 3.5 Sonnet) to enhance Draft's generated artifacts, adding the necessary Tomcat configuration, database support, and health checks.
+### Relation to Konveyor
 
-The [Konveyor AI (KAI)](https://github.com/konveyor/kai) project offers interesting insights into how AI can assist with application modernization. While our approach with Draft used AI to enhance deployment artifacts, KAI currently focuses on using AI to suggest code modifications based on static analysis rule violations - something we had already addressed in our modernized [after-container](../after-container) version (ironically, also with AI assistance). What Konveyor currently lacks is artifact generation capabilities for deploying these modernized applications. This presents an opportunity: by using the approach from KAI's AI-assisted approach and combining it with Draft, we could create a more end-to-end modernization solution. Draft could generate the initial deployment artifacts, and then AI could enhance them based on analysis of the codebase and existing configuration files (like our docker-compose.yml). This would bridge the gap between application modernization (KAI's current focus) and deployment artifact generation (Draft's strength), creating a more complete modernization-to-deployment pipeline.
+The [Konveyor AI (KAI)](https://github.com/konveyor/kai) project offers insights into AI-assisted application modernization. While KAI currently focuses on suggesting code modifications based on static analysis, our approach uses AI to enhance deployment artifacts. Combining KAI's code modernization approach with Draft's artifact generation could create a more complete modernization-to-deployment pipeline.
 
 ## Application Overview
 
-### Application Structure
-The application is a simple todo list web application built with:
-- Java 17
-- Apache Tomcat 9
-- PostgreSQL database
-- Maven for building
+### Technical Details
+- **Runtime**: Java 17, Tomcat 9
+- **Database**: PostgreSQL
+- **Build**: Maven
 
-### Environment Variables
-The application expects the following environment variables:
+### Configuration
+The application uses these environment variables:
 - `DB_HOST`: Database host name
 - `DB_PORT`: Database port (default: 5432)
 - `DB_NAME`: Database name
 - `DB_USER`: Database user
 - `DB_PASSWORD`: Database password
 
-### Health Checks
-The application provides a health check endpoint at `/todo/health` that returns:
-- `{"status":"UP"}` when healthy
-- HTTP 503 when unhealthy
-
-### Database Configuration
-The application uses PostgreSQL with the following configuration:
-- Database name: todo
-- User: todo
-- Password: todo123
-- Port: 5432
+### Monitoring
+- Health check endpoint at `/todo/health`
+- Returns `{"status":"UP"}` when healthy
+- Returns HTTP 503 when unhealthy
 
 ## Deployment Process
 
 ### Prerequisites
 - Draft CLI installed
-- Terraform CLI installed (for AKS cluster provisioning)
+- Terraform CLI installed
 - Azure CLI configured with appropriate permissions
 - Container registry access (ACR)
 - Podman configured for Azure authentication
 
-The `deploytok8s.sh` script uses Terraform to provision a test AKS cluster and ACR in Azure. The Terraform configuration can be found in the `terraform/` directory and handles:
-- Resource group creation
-- AKS cluster deployment with appropriate node pools
-- ACR creation and configuration
-- Required IAM roles and permissions
-- System-assigned managed identity for AKS to pull from ACR
+### Deployment Steps
 
-### Building and Deploying
-To build and deploy the application, run:
-```bash
-./deploytok8s.sh
-```
+The `deploytok8s.sh` script automates the entire deployment process:
 
-The script automates the entire deployment process through the following steps:
-
-1. **Draft Configuration and Artifact Generation**
+1. **Artifact Generation and Enhancement**
    - Creates working directory and copies source files
-   - Generates Draft configuration
-   - Creates initial artifacts using Draft
-   - Enhances artifacts with AI-generated improvements for Tomcat support
+   - Generates basic artifacts with Draft
+   - Enhances artifacts with AI-generated improvements
 
 2. **Container Build and Registry Operations**
-   - Builds the application using Maven
-   - Builds container with AI-enhanced Dockerfile using podman
-   - Tags image for ACR using the registry's FQDN
-   - Authenticates with ACR using Azure CLI credentials
-   - Pushes to ACR
-   - Configures AKS to pull from ACR using system-assigned managed identity
+   - Builds with Maven
+   - Creates container image with enhanced Dockerfile
+   - Pushes to Azure Container Registry
 
-3. **Infrastructure Setup**
-   - Uses Terraform to provision and manage Azure infrastructure
-   - Creates resource group and AKS cluster if they don't exist
-   - Deploys ACR with required networking and IAM configuration
-   - Sets up AKS system-assigned managed identity with ACR pull permissions
-   - Validates infrastructure deployment
-   - Configures Kubernetes context for deployment
+3. **Infrastructure Management**
+   - Provisions AKS cluster and ACR with Terraform
+   - Configures IAM permissions
+   - Sets up Kubernetes context
 
-4. **Application Deployment and Access**
+4. **Application Deployment**
    - Deploys using Helm
-   - Sets up services and configurations
-   - Verifies deployment status
-   - Enables access through port forwarding:
-     ```bash
-     kubectl port-forward service/todo-app 18081:80
-     ```
-   - Available endpoints:
-     - Main application: http://localhost:18081/todo
-     - Health check: http://localhost:18081/todo/health
-     - API: http://localhost:18081/todo/api/todos
+   - Configures services and environment
+   - Enables access through port forwarding
 
 ### Cleanup
-To remove the deployment:
 ```bash
 helm uninstall todo-app
 kubectl delete pod --all --force
 ```
 
-## Draft Implementation Details
+## Implementation Details
 
-### Configuration
-```yaml
-deployType: "Helm"          # Type of deployment artifacts to generate
-languageType: "java"        # Programming language/platform
-deployVariables:            # Variables for deployment configuration
-  - name: "PORT"           # Container port
-    value: "8080"
-  - name: "SERVICEPORT"    # Service port
-    value: "80"
-  - name: "APPNAME"        # Application name
-    value: "todo-app"
-  - name: "IMAGENAME"      # Container image name
-    value: "todo-app"
-languageVariables:          # Language-specific variables
-  - name: "VERSION"        # Java runtime version
-    value: "17-jre"
-  - name: "BUILDERVERSION" # Build environment version
-    value: "3-jdk-8"
-  - name: "PORT"          # Application port
-    value: "8080"
-```
+### Enhanced Artifacts
 
-### Generated and Enhanced Artifacts
+The AI-enhanced deployment artifacts include:
+- **Multi-stage Dockerfile** with Tomcat support
+- **Comprehensive Helm charts** with database integration
+- **Enhanced Kubernetes manifests** with proper configurations
+- **Database Support**: PostgreSQL deployment
+- **Environment Configuration**: Proper secrets management
+- **Resource Management**: Configurable limits and requests
 
-1. **Original Draft Artifacts**
-   - Basic Dockerfile (JAR-based)
-   - Simple Helm charts
-   - Basic Kubernetes manifests
+### Generated Kubernetes Resources
 
-2. **AI-Enhanced Artifacts**
-   - Multi-stage Dockerfile with Tomcat support
-   - Complete Helm charts with database integration
-   - Enhanced Kubernetes manifests with proper configurations
-
-3. **Key Improvements**
-   - Database Support: Added PostgreSQL deployment with proper configuration
-   - Health Checks: Added existing application health checks
-   - Environment Variables: Configured database connection with secrets
-   - Security: Added Kubernetes secrets management
-   - Resource Management: Added configurable limits and requests
-
-### Known Limitations and Workarounds
-
-1. **Spring-Centric Design**
-   - Draft assumes Spring Boot applications
-   - Solution: AI-generated Tomcat-specific configurations
-
-2. **Container Templates**
-   - Limited Java container support
-   - Solution: Enhanced multi-stage builds with proper base images
-
-3. **Helm Chart Generation**
-   - Basic manifest templates
-   - Solution: AI-generated comprehensive charts
-
-## Generated Kubernetes Resources
-
-### Structure
 ```
 k8s-simulation/helm/
-├── Chart.yaml     # Chart metadata
-├── values.yaml    # Configuration values
+├── Chart.yaml              # Chart metadata
+├── values.yaml             # Configuration values
 └── templates/     
-    ├── deployment.yaml    # Tomcat application
-    ├── service.yaml      # Service configuration
-    ├── configmap.yaml    # Environment variables
-    └── postgres.yaml     # Required database
+    ├── deployment.yaml     # Tomcat application
+    ├── service.yaml        # Service configuration
+    ├── configmap.yaml      # Environment variables
+    └── postgres.yaml       # Required database
 ```
 
-### Key Features
-- Tomcat-specific configuration
-- PostgreSQL database integration
-- Environment variable management
-- Health check endpoints
-- Resource specifications
-
-## Project Structure
+### Project Structure
 
 ```
 migration-draft/
-├── deploytok8s.sh        # Main deployment script
-├── k8s-simulation/       # AI-generated Kubernetes manifests
-└── temp-after-container/ # Working directory (created during deployment)
-    ├── src/             # Application source
-    ├── pom.xml          # Build configuration
-    ├── dockerfile       # AI-enhanced Dockerfile
-    └── charts/         # Generated Helm charts
+├── deploytok8s.sh          # Main deployment script
+├── k8s-simulation/         # AI-generated Kubernetes manifests
+└── temp-after-container/   # Working directory (created during deployment)
+    ├── src/                # Application source
+    ├── pom.xml             # Build configuration
+    ├── dockerfile          # AI-enhanced Dockerfile
+    └── charts/             # Generated Helm charts
 ```
