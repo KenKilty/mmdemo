@@ -91,4 +91,4 @@ public class Todo implements Serializable {
         Todo other = (Todo) obj;
         return id != null && id.equals(other.id);
     }
-} 
+}

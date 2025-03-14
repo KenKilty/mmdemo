@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Service class for managing Todo items in a PostgreSQL database.
  */
-public class TodoStorage {
+public class TodoStorage implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(TodoStorage.class);
     private final Connection connection;
 
@@ -31,14 +31,15 @@ public class TodoStorage {
     /**
      * Checks the health of the database connection.
      * 
-     * @throws SQLException if the database connection is not healthy
+     * @return true if connection is healthy, false otherwise
      */
-    public void checkHealth() throws SQLException {
+    public boolean checkHealth() {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("SELECT 1");
+            return true;
         } catch (SQLException e) {
             logger.error("Database health check failed", e);
-            throw e;
+            return false;
         }
     }
 
@@ -67,6 +68,7 @@ public class TodoStorage {
      * Retrieves all Todo items from the database.
      *
      * @return list of all Todo items
+     * @throws RuntimeException if database access fails
      */
     public List<Todo> getAllTodos() {
         List<Todo> todos = new ArrayList<>();
@@ -82,8 +84,10 @@ public class TodoStorage {
                 todo.setDescription(rs.getString("description"));
                 todo.setCompleted(rs.getBoolean("completed"));
                 todo.setCreatedAt(rs.getTimestamp("created_at").getTime());
+                
+                // Fix: First get the timestamp as an object, then check if it was null
                 java.sql.Timestamp completedAt = rs.getTimestamp("completed_at");
-                if (rs.wasNull()) {
+                if (completedAt == null) {
                     todo.setCompletedAt(null);
                 } else {
                     todo.setCompletedAt(completedAt.getTime());
@@ -175,14 +179,31 @@ public class TodoStorage {
     /**
      * Deletes a Todo item from the database.
      *
-     * @param id the ID of the Todo item to delete
+     * @param id the ID of the Todo item to delete as a String
      * @return true if the todo was deleted, false if not found
+     * @throws RuntimeException if database operation fails
      */
     public boolean deleteTodo(String id) {
+        try {
+            return deleteTodo(Integer.parseInt(id));
+        } catch (NumberFormatException e) {
+            logger.warn("Invalid ID format: {}", id);
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a Todo item from the database.
+     *
+     * @param id the ID of the Todo item to delete
+     * @return true if the todo was deleted, false if not found
+     * @throws RuntimeException if database operation fails
+     */
+    public boolean deleteTodo(int id) {
         String query = "DELETE FROM todos WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, Integer.parseInt(id));
+            stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 logger.info("Deleted todo with id: {}", id);
@@ -197,14 +218,17 @@ public class TodoStorage {
 
     /**
      * Closes the database connection.
+     * Implementation of AutoCloseable interface.
      */
+    @Override
     public void close() {
         if (connection != null) {
             try {
                 connection.close();
+                logger.info("Database connection closed");
             } catch (SQLException e) {
                 logger.error("Failed to close database connection", e);
             }
         }
     }
-} 
+}

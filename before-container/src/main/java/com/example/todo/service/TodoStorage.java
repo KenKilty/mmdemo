@@ -22,6 +22,7 @@ public class TodoStorage {
     private final String storagePath;
     private final ObjectMapper objectMapper;
     private static AtomicLong idGenerator = new AtomicLong(1);
+    // This is potentially problematic as it doesn't account for existing IDs in the storage
 
     /**
      * Initializes the storage system using configuration from properties file.
@@ -47,9 +48,27 @@ public class TodoStorage {
             
             logger.info("Using storage path: {}", 
                 storagePath);
+                
+            // Initialize ID generator from existing data
+            initializeIdGenerator();
         } catch (IOException e) {
             logger.error("Failed to load configuration", e);
             throw new RuntimeException("Failed to initialize storage", e);
+        }
+    }
+    
+    /**
+     * Initializes the ID generator based on existing data to avoid ID conflicts.
+     */
+    private void initializeIdGenerator() {
+        List<Todo> existingTodos = loadTodos();
+        if (!existingTodos.isEmpty()) {
+            long maxId = existingTodos.stream()
+                .mapToLong(Todo::getId)
+                .max()
+                .orElse(0);
+            idGenerator.set(maxId + 1);
+            logger.info("ID generator initialized to {}", idGenerator.get());
         }
     }
 
@@ -80,12 +99,7 @@ public class TodoStorage {
      * @throws IOException if there is an error writing to the storage file
      */
     public void saveTodos(List<Todo> todos) throws IOException {
-        try {
-            objectMapper.writeValue(new File(storagePath), todos);
-        } catch (IOException e) {
-            logger.error("Failed to save todos to file", e);
-            throw new RuntimeException("Failed to save todos", e);
-        }
+        objectMapper.writeValue(new File(storagePath), todos);
     }
 
     /**
@@ -143,4 +157,4 @@ public class TodoStorage {
             throw new RuntimeException("Failed to delete todo", e);
         }
     }
-} 
+}

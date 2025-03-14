@@ -83,7 +83,8 @@ cd kantra && ./darwin-kantra analyze \
   --output "$SCRIPT_DIR/reports" \
   --target cloud-readiness \
   --rules "$SCRIPT_DIR/rulesets" \
-  --overwrite
+  --overwrite \
+  --skip-static-report
 
 echo -e "${GREEN}Analysis complete! Results are available in the reports directory:${NC}"
 echo -e "  - ${YELLOW}output.yaml${NC}: Detailed analysis results in YAML format"

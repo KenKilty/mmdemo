@@ -7,13 +7,15 @@ This document demonstrates how Konveyor Kantra can identify legacy practices and
 [Konveyor](https://konveyor.io/) is an open-source project providing tools for application modernization, helping organizations migrate applications to cloud-native environments.
 
 [Kantra](https://github.com/konveyor/kantra) is Konveyor's static analysis tool that identifies:
-- Legacy patterns and anti-patterns
+
+- Legacy patterns and antipatterns
 - Cloud-native readiness issues
 - Migration blockers and modernization opportunities
 - Dependency concerns
 
 ### Analysis Process Flow
-```
+
+```text
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │  Legacy App     │     │  Kantra         │     │  Analysis       │
 │  (Source Code)  │ ──> │  Analysis       │ ──> │  Report         │
@@ -30,7 +32,8 @@ This document demonstrates how Konveyor Kantra can identify legacy practices and
 ## Project Structure and Setup
 
 ### Components
-```
+
+```text
 mmdemo/
 ├── before-container/    # Legacy application to analyze
 ├── after-container/     # Modernized version with fixes
@@ -42,19 +45,22 @@ mmdemo/
 ```
 
 ### Platform Requirements
+
 - Tested on macOS (Darwin) with Apple Silicon (ARM64)
 - For other platforms:
   - macOS (Darwin) with Intel: Update KANTRA_URL to use x86_64 binary
   - Windows: Update KANTRA_URL to use windows binary and adjust paths
-  - Linux: Update KANTRA_URL to use linux binary and adjust paths
+  - Linux: Update KANTRA_URL to use Linux binary and adjust paths
 
 ### Dependencies
+
 - Konveyor Kantra v0.6.1
 - curl, unzip, bash shell, Git
 
 ## Analysis Configuration
 
 ### Analysis Settings (`reports/settings.json`)
+
 ```json
 {
   "analysis": {
@@ -70,6 +76,7 @@ mmdemo/
 ```
 
 ### Execution Process
+
 1. **Preparation**: Clean artifacts, verify rules, check workspace
 2. **Execution**: Run analysis, evaluate rules, generate output
 3. **Output Generation**: Create logs and reports
@@ -82,7 +89,7 @@ mmdemo/
 | Rule ID | Description | Pattern | Effort |
 |---------|------------|---------|--------|
 | custom-ruleset-legacy-code-01000 | Legacy Code Style | `.*\.java$` | 3 |
-| custom-ruleset-legacy-config-01000 | Hardcoded Configuration | `.*\.properties$` | 5 |
+| custom-ruleset-legacy-config-01000 | Hard coded Configuration | `.*\.properties$` | 5 |
 | custom-ruleset-legacy-logging-01000 | File-based Logging | `.*\.log$` | 5 |
 | custom-ruleset-legacy-storage-01000 | File-based Storage | `.*\.json$` | 5 |
 
@@ -92,9 +99,9 @@ mmdemo/
    - Files: Java model, service, and servlet classes
    - Issues: Missing documentation, inconsistent formatting, non-standard patterns
   
-2. **Hardcoded Configuration Paths**
+2. **Hard coded Configuration Paths**
    - Files: Properties and configuration files
-   - Issues: Local filesystem references, absolute paths, environment-specific values
+   - Issues: Local file system references, absolute paths, environment-specific values
 
 3. **File-based Logging**
    - Files: Log files and logging configuration
@@ -111,34 +118,44 @@ mmdemo/
 ## Modernization Solutions
 
 ### 1. Code Style Improvements
+
 **Location:** `after-container/src/main/java/`
+
 - Implemented Google Style Guide compliance with Checkstyle
 - Added comprehensive documentation (JavaDoc at all levels)
 - Standardized 2-space indentation and 100-character line limits
 - Enabled automated style checking integrated with CI/CD
 
 ### 2. Configuration Management
+
 **Location:** `after-container/podman/`
+
 - Moved configuration to environment variables with validation
-- Removed hardcoded paths and implemented path resolution
+- Removed hard coded paths and implemented path resolution
 - Added container-friendly configuration and runtime detection
 - Implemented environment separation with secure defaults
 
 ### 3. Logging Modernization
+
 **Location:** `after-container/src/main/resources/logback.xml`
+
 - Implemented container stdout/stderr logging with console appender
 - Added JSON-formatted structured logs with correlation
 - Removed all file-based logging mechanisms
 
 ### 4. Storage Modernization
+
 **Location:** `after-container/src/main/java/com/example/todo/service/TodoStorage.java`
+
 - Replaced file storage with PostgreSQL database
 - Implemented connection pooling with HikariCP
 - Added proper transaction management and data validation
 - Removed all file system dependencies
 
 ### 5. Cache Modernization
+
 **Location:** `after-container/src/main/java/com/example/todo/service/`
+
 - Removed EhCache dependency completely
 - Implemented stateless design with request context
 - Prepared for horizontal scaling with session handling
@@ -146,6 +163,7 @@ mmdemo/
 ## Conclusion
 
 Konveyor Kantra helps:
+
 1. Identify legacy practices in applications
 2. Provide specific modernization guidance
 3. Track improvements through analysis

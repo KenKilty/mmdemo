@@ -1,6 +1,6 @@
 - ruleID: custom-ruleset-legacy-config-01000
   name: Hardcoded configuration paths in properties files
-  description: The application uses hardcoded paths in configuration files, which is problematic for containerization and cloud deployment.
+  description: The application uses hardcoded paths and environment-specific values in configuration files, which prevents proper container configuration and environment separation.
   category: mandatory
   effort: 5
   labels:
@@ -13,24 +13,30 @@
       title: Azure Config Server
       description: Use Azure Config Server for externalized configuration management
   message: |
-    The application uses hardcoded paths in configuration files, which is problematic for containerization and cloud deployment.
+    The application uses hardcoded paths and environment-specific values in configuration files.
 
     Hardcoded paths in configuration files can cause issues when:
     - Deploying to containers where file system paths are different
     - Running in cloud environments where local file system access is restricted
     - Scaling the application across multiple instances
+    - Managing different environments (dev, test, prod)
+    - Implementing container health checks
+    - Configuring container resource limits
 
     Recommendation:
-    - Use environment variables for configuration
+    - Use environment variables for all configuration
     - Implement a configuration server (e.g., Azure Config Server)
-    - Use cloud-native configuration management solutions
+    - Use cloud-native configuration management
+    - Implement container-aware configuration validation
+    - Add runtime configuration checks
+    - Use secrets management for sensitive data
   when:
     builtin.file:
       pattern: ".*\\.properties$"
 
 - ruleID: custom-ruleset-legacy-storage-01000
   name: File-based storage implementation
-  description: The application uses file-based storage with direct filesystem access, which is problematic for containerization and cloud deployment.
+  description: The application uses file-based storage with direct filesystem access, which prevents proper data persistence in containerized environments and makes data management across containers impossible.
   category: mandatory
   effort: 5
   labels:
@@ -43,25 +49,33 @@
       title: Azure Database
       description: Use Azure Database for persistent storage
   message: |
-    The application uses file-based storage with direct filesystem access, which is problematic for containerization and cloud deployment.
+    The application uses file-based storage with direct filesystem access.
 
     File-based storage can cause issues when:
     - Deploying to containers where file system access is restricted
     - Running in cloud environments where local storage is ephemeral
     - Scaling the application across multiple instances
     - Managing data consistency across instances
+    - Implementing container data persistence
+    - Handling container restarts
+    - Managing container volumes
+    - Implementing data backup and recovery
 
     Recommendation:
     - Use a proper database service (e.g., Azure Database)
     - Implement proper transaction management
     - Use cloud-native storage solutions
+    - Implement container-aware data access patterns
+    - Add proper data validation
+    - Use connection pooling
+    - Implement retry mechanisms
   when:
     builtin.file:
       pattern: ".*\\.json$"
 
 - ruleID: custom-ruleset-legacy-logging-01000
   name: File-based logging implementation
-  description: The application uses file-based logging with local file system access, which is problematic for containerization and cloud deployment.
+  description: The application uses file-based logging with local file system access, which prevents proper log aggregation in containerized environments and makes debugging container issues difficult.
   category: mandatory
   effort: 5
   labels:
@@ -74,25 +88,31 @@
       title: Azure Logging
       description: Use Azure Logging for centralized log management
   message: |
-    The application uses file-based logging with local file system access, which is problematic for containerization and cloud deployment.
+    The application uses file-based logging with local file system access.
 
     File-based logging can cause issues when:
     - Deploying to containers where file system access is restricted
     - Running in cloud environments where local storage is ephemeral
     - Managing logs across multiple instances
     - Implementing log rotation and retention
+    - Debugging container issues
+    - Monitoring container health
+    - Analyzing container performance
 
     Recommendation:
     - Use container stdout/stderr for logging
     - Implement structured logging (JSON format)
     - Use cloud-native logging solutions
+    - Add container-specific log context
+    - Implement log correlation across containers
+    - Use container-aware log levels
   when:
     builtin.file:
       pattern: ".*\\.log$"
 
 - ruleID: custom-ruleset-legacy-code-01000
   name: Legacy code style practices
-  description: The application demonstrates legacy code style practices that may impact maintainability and cloud readiness.
+  description: The application contains code style practices that hinder containerization and cloud deployment, including inconsistent error handling, hardcoded values, and non-standard patterns that make container orchestration difficult.
   category: mandatory
   effort: 3
   labels:
@@ -105,21 +125,23 @@
       title: Azure Code Quality
       description: Use Azure DevOps for code quality management
   message: |
-    The application demonstrates legacy code style practices that may impact maintainability and cloud readiness.
+    The application contains code style practices that hinder containerization and cloud deployment.
 
     Legacy code style practices can cause issues with:
-    - Code maintainability
-    - Team collaboration
-    - Automated testing
-    - Code review efficiency
+    - Container orchestration and scaling
+    - Error handling in distributed environments
+    - Configuration management in containers
+    - Log aggregation and monitoring
+    - Health check implementation
+    - Graceful shutdown handling
 
     Recommendation:
-    - Follow Google Style Guide compliance
-    - Implement consistent import ordering
-    - Add comprehensive documentation
-    - Use standard 2-space indentation
-    - Limit lines to 100 characters
-    - Enable automated style checking
+    - Implement container-aware error handling
+    - Use environment variables for configuration
+    - Add proper health check endpoints
+    - Implement graceful shutdown hooks
+    - Follow 12-factor app principles
+    - Enable automated container testing
   when:
     builtin.file:
       pattern: ".*\\.java$" 

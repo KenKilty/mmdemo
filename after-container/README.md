@@ -137,6 +137,8 @@ The application uses the following environment variables:
 - `DB_POOL_TIMEOUT`: Connection timeout in ms (default: 30000)
 - `HEALTH_CHECK_INTERVAL`: Health check interval in ms (default: 60000)
 
+> **Note**: The config.properties file in the resources directory contains legacy settings that aren't used in the containerized version. The application now uses environment variables for all configuration.
+
 ### Project Structure
 
 ```text
@@ -152,3 +154,16 @@ after-container/
 ├── podman-compose.yml    # Container orchestration
 └── pom.xml              # Maven configuration
 ```
+
+## Future Improvements
+
+For future versions, we plan to implement:
+
+1. Enhanced connection pooling with configurable parameters:
+   - `DB_POOL_SIZE`: Connection pool size
+   - `DB_POOL_TIMEOUT`: Connection timeout in milliseconds
+
+2. Advanced health checking with configurable intervals:
+   - `HEALTH_CHECK_INTERVAL`: Health check interval in milliseconds
+
+3. Transaction management with configurable isolation levels

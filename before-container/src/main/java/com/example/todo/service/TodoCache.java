@@ -72,10 +72,11 @@ public class TodoCache {
 
     /**
      * Invalidates the cache by removing all todos.
+     * This method also clears any individual todo items.
      */
     public void invalidateCache() {
-        cache.remove(ALL_TODOS_KEY);
-        logger.info("Cache invalidated");
+        cache.removeAll();
+        logger.info("Cache fully invalidated");
     }
 
     /**
@@ -113,4 +114,4 @@ public class TodoCache {
         cache.remove(id);
         logger.info("Removed todo with id {} from cache", id);
     }
-} 
+}

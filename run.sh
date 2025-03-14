@@ -155,7 +155,7 @@ restart_containers() {
 }
 
 # Main script
-check_podman
+# Only check for curl as it's needed for all versions
 check_curl
 
 # Execute the appropriate script
@@ -174,6 +174,8 @@ if [ "$VERSION" = "analyze" ]; then
             ;;
     esac
 elif [ "$VERSION" = "deploy" ]; then
+    # Container deployments need podman
+    check_podman
     check_script "migration-draft" "deploytok8s.sh"
     print_status "Kubernetes Deployment"
     
@@ -195,6 +197,7 @@ elif [ "$VERSION" = "legacy" ]; then
     check_script "before-container" "run-legacy.sh"
     print_status "Legacy Todo Application"
     
+    # Legacy version doesn't need podman
     # Map the action to run-legacy.sh parameters
     case "$ACTION" in
         start)
@@ -224,6 +227,8 @@ elif [ "$VERSION" = "legacy" ]; then
             ;;
     esac
 else
+    # Container version needs podman
+    check_podman
     check_script "after-container" "run-container.sh"
     print_status "Containerized Todo Application"
     
