@@ -11,5 +11,6 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "java.dependency.packagePresentation": "hierarchical"
+    "java.dependency.packagePresentation": "hierarchical",
+    "konveyor.analysis.labelSelector": "(konveyor.io/target=cloud-readiness) || (discovery)"
 } 

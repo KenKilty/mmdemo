@@ -1,0 +1,8 @@
+{
+    "konveyor.analysis.labelSelector": "(konveyor.io/target=cloud-readiness) || (discovery)",
+    "konveyor.analysis.customRules": [
+        "/Users/kennethkilty/Documents/source/mmdemo/migration-konveyor/rulesets/legacy-practices.yaml"
+    ],
+    "konveyor.analysis.useDefaultRulesets": true,
+    "java.configuration.updateBuildConfiguration": "automatic"
+}

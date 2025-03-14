@@ -19,6 +19,7 @@ This repository contains both the application code and all artifacts generated d
 legacy-to-container/
 ├── before-container/       # Starting point: Legacy Java application
 ├── migration-konveyor/     # Analysis findings using Konveyor Kantra
+├── migration-konveyor-ai/  # Konveyor AI analysis and comparison
 ├── after-container/        # AI-enhanced containerized version
 ├── migration-draft/        # Deployment artifacts for AKS
 ├── MIGRATION.md           # Migration journey narrative
@@ -37,12 +38,17 @@ Each component represents a phase in our modernization journey:
    - Findings and recommendations that guided our containerization
    - See [migration-konveyor/README.md](migration-konveyor/README.md) for details
 
-3. **Containerized Application** (`after-container/`):
+3. **Konveyor AI Analysis** (`migration-konveyor-ai/`):
+   - Exploration of Konveyor AI's automated modernization
+   - Comparison with Claude-assisted development approach
+   - See [migration-konveyor-ai/README.md](migration-konveyor-ai/README.md) for details
+
+4. **Containerized Application** (`after-container/`):
    - Modernized version implementing analysis recommendations
    - Cloud-native adaptations guided by AI insights
    - See [after-container/README.md](after-container/README.md) for details
 
-4. **Deployment Configuration** (`migration-draft/`):
+5. **Deployment Configuration** (`migration-draft/`):
    - Draft-generated Kubernetes artifacts enhanced with AI improvements
    - Demonstrates how Draft's output can be enhanced for legacy Java apps beyond current capability
    - Validated deployment configuration for AKS
@@ -62,6 +68,24 @@ Each component represents a phase in our modernization journey:
 - **Analysis**: Konveyor Kantra
 - **Deployment**: Draft, Kubernetes (AKS)
 - **Infrastructure**: Terraform (Azure)
+
+## Konveyor AI Analysis
+
+The `migration-konveyor-ai/` directory documents our exploration of Konveyor AI (KAI), comparing its automated modernization capabilities with AI-assisted development:
+
+1. **KAI Implementation** (`before-container-kai/`):
+   - Automated analysis and code generation using Mistral LLM
+   - Basic modernization patterns with caching implementation
+   - Traditional deployment approach with Java 8
+   - See [migration-konveyor-ai/README.md](migration-konveyor-ai/README.md) for details
+
+2. **Comparative Analysis**:
+   - Side-by-side comparison with Claude-assisted implementation
+   - Evaluation of automated vs. interactive AI development
+   - Insights into different modernization approaches
+   - Documentation of tool effectiveness and limitations
+
+This exploration provides valuable insights into how different AI-assisted approaches can complement each other in modernization efforts, suggesting potential improvements for future tooling.
 
 ## License
 
