@@ -1,0 +1,8 @@
+kind: Tackle
+apiVersion: tackle.konveyor.io/v1alpha1
+metadata:
+  name: tackle
+  namespace: konveyor-tackle
+spec:
+  rwx_supported: "false"
+  feature_auth_required: "false" 

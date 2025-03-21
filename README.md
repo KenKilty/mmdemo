@@ -38,17 +38,22 @@ Each component represents a phase in our modernization journey:
    - Findings and recommendations that guided our containerization
    - See [migration-konveyor/README.md](migration-konveyor/README.md) for details
 
-3. **Konveyor AI Analysis** (`migration-konveyor-ai/`):
+3. **Konveyor Hub Analysis** (`migration-konveyor-hub/`):
+   - Detailed analysis of Konveyor Hub's architecture and operation
+   - Core services, storage, and analysis components
+   - See [migration-konveyor-hub/README.md](migration-konveyor-hub/README.md) for details
+
+4. **Konveyor AI Analysis** (`migration-konveyor-ai/`):
    - Exploration of Konveyor AI's automated modernization
    - Comparison with Claude-assisted development approach
    - See [migration-konveyor-ai/README.md](migration-konveyor-ai/README.md) for details
 
-4. **Containerized Application** (`after-container/`):
+5. **Containerized Application** (`after-container/`):
    - Modernized version implementing analysis recommendations
    - Cloud-native adaptations guided by AI insights
    - See [after-container/README.md](after-container/README.md) for details
 
-5. **Deployment Configuration** (`migration-draft/`):
+6. **Deployment Configuration** (`migration-draft/`):
    - Draft-generated Kubernetes artifacts enhanced with AI improvements
    - Demonstrates how Draft's output can be enhanced for legacy Java apps beyond current capability
    - Validated deployment configuration for AKS
@@ -86,6 +91,27 @@ The `migration-konveyor-ai/` directory documents our exploration of Konveyor AI 
    - Documentation of tool effectiveness and limitations
 
 This exploration provides valuable insights into how different AI-assisted approaches can complement each other in modernization efforts, suggesting potential improvements for future tooling.
+
+## Konveyor Hub Analysis
+
+The `migration-konveyor-hub/` directory documents our detailed analysis of Konveyor Hub's architecture and operation:
+
+1. **Core Services**:
+   - Tackle Hub, UI, and Operator components
+   - Analysis pods and task management
+   - Storage and data persistence layer
+
+2. **Infrastructure**:
+   - AKS deployment with Terraform
+   - Resource management and CRDs
+   - Monitoring and logging setup
+
+3. **Analysis Components**:
+   - Three-container analysis pods
+   - Rule sets and processing
+   - Real-time progress tracking
+
+See [migration-konveyor-hub/README.md](migration-konveyor-hub/README.md) for a comprehensive breakdown of the system's architecture and operation.
 
 ## License
 
